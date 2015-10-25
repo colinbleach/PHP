@@ -1,6 +1,0 @@
-RUN sudo mkdir /var/www/Symfony/Component
-RUN cd /var/www/Symfony/Component
-RUN git clone https://github.com/symfony/dependency-injection.git
-RUN git clone https://github.com/symfony/http-kernel.git
-RUN sudo echo "deb http://us.archive.ubuntu.com/ubuntu vivid main universe" >> /etc/apt/sources.list
-RUN sudo apt-get install php-doctrine-cache
