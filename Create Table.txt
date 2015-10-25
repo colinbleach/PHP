@@ -1,0 +1,1 @@
+CREATE TABLE Person(FirstName varchar(80),LastName varchar(80), Age int)
