@@ -1,6 +1,5 @@
 <?PHP
 	require '/opt/vendor/autoload.php';
-	  require '/opt/config.php';
 
 	  use Aws\DynamoDb\DynamoDbClient;
 	  use Aws\Common\Enum\Region;
@@ -11,6 +10,61 @@
 	  use Aws\S3\S3Client;
 	  use Aws\Rds\RdsClient;
 	  use Aws\ElasticBeanstalk\ElasticBeanstalkClient;
+
+function setup(){
+	$dynClient = DynamoDbClient::factory(array(
+					'key' => 'AKIAIZAWSYM2S7OAB62Q',
+					'secret' => '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',
+				   'region'  => 'us-west-2',
+					'endpoint' => 'http://dynamodb.us-west-2.amazonaws.com',
+					'version' => 'latest'
+				));
+				
+	$result = $dynClient->listTables();
+	
+	$exists = false;
+	// TableNames contains an array of table names
+	foreach ($result['TableNames'] as $tableName) {
+		if($tableName == 'person')
+		{
+				$exists = true;
+		}
+	}
+	
+	if(!$exists){
+		$dynClient->createTable(array(
+			'TableName' => 'person',
+			'AttributeDefinitions' => array(
+				array(
+					'AttributeName' => 'id',
+					'AttributeType' => 'S'
+				),
+				array(
+					'AttributeName' => 'data',
+					'AttributeType' => 'S'
+				)
+			),
+			'KeySchema' => array(
+				array(
+					'AttributeName' => 'id',
+					'KeyType'       => 'HASH'
+				),
+				array(
+					'AttributeName' => 'data',
+					'KeyType'       => 'RANGE'
+				)
+			),
+			'ProvisionedThroughput' => array(
+				'ReadCapacityUnits'  => 1,
+				'WriteCapacityUnits' => 1
+			)
+		));
+		
+		$dynClient->waitUntil('TableExists', array(
+			'TableName' => 'person'
+		));
+	}
+}
 
 function teardown(){
 	$dynClient = DynamoDbClient::factory(array(
@@ -37,7 +91,7 @@ function teardown(){
 				));
 				
 	$result = $client->terminateEnvironment(array(
-		'EnvironmentName' => 'testmypackage',
+		'EnvironmentName' => 'tradetracker',
 		'TerminateResources' => true
 	));
 				
@@ -46,19 +100,25 @@ function teardown(){
 
 function takedown(){
 	
-	$client = RdsClient::factory(array(
-					'key' => 'AKIAIZAWSYM2S7OAB62Q',
-					'secret' => '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',
-				   'region'  => 'us-west-2',
-					'endpoint' => 'https://rds.us-west-2.amazonaws.com'
-				));
+	//$client = RdsClient::factory(array(
+	//				'key' => 'AKIAIZAWSYM2S7OAB62Q',
+	//				'secret' => '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',
+	//			   'region'  => 'us-west-2',
+	//				'endpoint' => 'https://rds.us-west-2.amazonaws.com'
+	//			));
 	
-	 //$result = $client->deleteDBInstance(array(
-    // DBClusterIdentifier is required
-    //'DBClusterIdentifier' => 'aa1ceihdi49sdo6',
-    //'SkipFinalSnapshot' => true
-//));
-return $client;
+	//$result = $client->deleteDBInstance(array(
+	//	#DBClusterIdentifier is required
+	//	'DBClusterIdentifier' => 'aa1ceihdi49sdo6',
+	//	'SkipFinalSnapshot' => true
+	//));
+	
+	//$result = $client->deleteDBCluster(array(
+	//	#DBClusterIdentifier is required
+	//	'DBClusterIdentifier' => 'aa1ceihdi49sdo6',
+	//	'SkipFinalSnapshot' => true
+	//));
+//return $result;
 }
 
 function test() {
@@ -71,7 +131,7 @@ function test() {
             'Age' => 10
         );
 
-                $dbconn = pg_connect("host=aa1ceihdi49sdo6.cmai8v7xjrho.us-west-2.rds.amazonaws.com port=5432 dbname=postgres user=tradetracker password=TradeTrackerTest");
+                $dbconn = pg_connect("host=aarfl7e46cylxt.cmai8v7xjrho.us-west-2.rds.amazonaws.com port=5432 dbname=postgres user=tradetracker password=TradeTrackerTest");
                 $result = pg_query($dbconn, "INSERT INTO Person(FirstName, LastName, Age)
                   VALUES('test', 'test', 10);");
 
@@ -88,7 +148,7 @@ function test() {
 }
 
 function transfer(){
-        $dbconn = pg_connect("host=aa1ceihdi49sdo6.cmai8v7xjrho.us-west-2.rds.amazonaws.com port=5432 dbname=postgres user=tradetracker password=TradeTrackerTest");
+        $dbconn = pg_connect("host=aarfl7e46cylxt.cmai8v7xjrho.us-west-2.rds.amazonaws.com port=5432 dbname=postgres user=tradetracker password=TradeTrackerTest");
         $result = pg_query($dbconn, "SELECT * FROM Person");
         $arr = pg_fetch_all($result);
 
@@ -198,6 +258,11 @@ if (isset($_GET["action"]) && in_array($_GET["action"], $possible_url))
         $value = teardown();
         break;
     }
+}
+
+if($_SERVER['REQUEST_METHOD'] == 'POST')
+{
+		$value = setup();
 }
 
 exit(json_encode($value));

@@ -2,7 +2,7 @@ FROM ubuntu
 
 RUN sudo apt-get update -y
 RUN sudo apt-get upgrade -y
-RUN apt-get install -y nano wget dialog net-tools
+RUN apt-get install -y wget dialog net-tools
 
 RUN sudo apt-get install -y nginx
 RUN sudo apt-get install -y php5
@@ -16,13 +16,9 @@ RUN sudo curl -sS https://getcomposer.org/installer | php
 RUN sudo cp composer.phar /opt/
 ADD composer.json /opt/
 RUN cd /opt/ && sudo php /opt/composer.phar install; exit 0
-RUN cd
 
-# Copy a configuration file from the current directory
 ADD nginx.conf /etc/nginx/
 ADD index.php /opt/
-ADD test.php /opt/
-ADD config.php /opt/
 ADD startscript.sh /opt/
 RUN sudo chmod 777 /opt/startscript.sh
 
