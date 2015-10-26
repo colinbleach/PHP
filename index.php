@@ -13,8 +13,8 @@
 
 function setup(){
 	$dynClient = DynamoDbClient::factory(array(
-					'key' => 'AKIAIZAWSYM2S7OAB62Q',
-					'secret' => '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',
+					'key' => '{access key}',
+					'secret' => '{secret key}',
 				   'region'  => 'us-west-2',
 					'endpoint' => 'http://dynamodb.us-west-2.amazonaws.com',
 					'version' => 'latest'
@@ -68,8 +68,8 @@ function setup(){
 
 function teardown(){
 	$dynClient = DynamoDbClient::factory(array(
-					'key' => 'AKIAIZAWSYM2S7OAB62Q',
-					'secret' => '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',
+					'key' => '{access key}',
+					'secret' => '{secret key}',
 				   'region'  => 'us-west-2',
 					'endpoint' => 'http://dynamodb.us-west-2.amazonaws.com',
 					'version' => 'latest'
@@ -84,8 +84,8 @@ function teardown(){
 	));
 	
 	$client = ElasticBeanstalkClient::factory(array(
-					'key' => 'AKIAIZAWSYM2S7OAB62Q',
-					'secret' => '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',
+					'key' => '{access key}',
+					'secret' => '{secret key}',
 				   'region'  => 'us-west-2',
 					'endpoint' => 'https://elasticbeanstalk.us-west-2.amazonaws.com'
 				));
@@ -101,8 +101,8 @@ function teardown(){
 function takedown(){
 	
 	//$client = RdsClient::factory(array(
-	//				'key' => 'AKIAIZAWSYM2S7OAB62Q',
-	//				'secret' => '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',
+	//				'key' => '{access key}',
+	//				'secret' => '{secret key}',
 	//			   'region'  => 'us-west-2',
 	//				'endpoint' => 'https://rds.us-west-2.amazonaws.com'
 	//			));
@@ -154,8 +154,8 @@ function transfer(){
 
        foreach($arr as $val) {
                $client = DynamoDbClient::factory(array(
-					'key' => 'AKIAIZAWSYM2S7OAB62Q',
-					'secret' => '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',
+					'key' => '{access key}',
+					'secret' => '{secret key}',
 				   'region'  => 'us-west-2',
 					'endpoint' => 'http://dynamodb.us-west-2.amazonaws.com',
 					'version' => 'latest'
@@ -183,8 +183,8 @@ function countRows(){
 try{
 
 	$client = DynamoDbClient::factory(array(
-		'key' => 'AKIAIZAWSYM2S7OAB62Q',
-		'secret' => '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',
+		'key' => '{access key}',
+		'secret' => '{secret key}',
 	   'region'  => 'us-west-2',
 		'endpoint' => 'http://dynamodb.us-west-2.amazonaws.com',
 		'version' => 'latest'
