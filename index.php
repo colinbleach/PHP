@@ -27,7 +27,7 @@ function setup(){
 	foreach ($result['TableNames'] as $tableName) {
 		if($tableName == 'person')
 		{
-				$exists = true;
+			$exists = true;
 		}
 	}
 	
@@ -91,7 +91,7 @@ function teardown(){
 				));
 				
 	$result = $client->terminateEnvironment(array(
-		'EnvironmentName' => 'tradetracker',
+		'EnvironmentName' => 'tradetrackerapp',
 		'TerminateResources' => true
 	));
 				
@@ -131,7 +131,7 @@ function test() {
             'Age' => 10
         );
 
-                $dbconn = pg_connect("host=aarfl7e46cylxt.cmai8v7xjrho.us-west-2.rds.amazonaws.com port=5432 dbname=postgres user=tradetracker password=TradeTrackerTest");
+                $dbconn = pg_connect("host=aamapgnyutd6kg.cqj8wdzrfpoc.us-west-2.rds.amazonaws.com port=5432 dbname=postgres user={username} password={password}");
                 $result = pg_query($dbconn, "INSERT INTO Person(FirstName, LastName, Age)
                   VALUES('test', 'test', 10);");
 
@@ -148,7 +148,7 @@ function test() {
 }
 
 function transfer(){
-        $dbconn = pg_connect("host=aarfl7e46cylxt.cmai8v7xjrho.us-west-2.rds.amazonaws.com port=5432 dbname=postgres user=tradetracker password=TradeTrackerTest");
+        $dbconn = pg_connect("host=aamapgnyutd6kg.cqj8wdzrfpoc.us-west-2.rds.amazonaws.com port=5432 dbname=postgres user={username} password={password}");
         $result = pg_query($dbconn, "SELECT * FROM Person");
         $arr = pg_fetch_all($result);
 
@@ -189,17 +189,6 @@ try{
 		'endpoint' => 'http://dynamodb.us-west-2.amazonaws.com',
 		'version' => 'latest'
 	));
-
-	#        $response = $client->putItem(array(
-	#                               'TableName' => 'person',
-	#                                     'Item' => array('id' => array('S' => '9bc6fcd5-34b0-4833-9e00-59481cfd4405'),
-	#                                        'data' => array('S' => '{"firstname":"test","lastname":"test","age":10}')
-	#)
-	#));
-
-	#$result = $client->describeTable(array(
-	#    'TableName' => 'person'
-	#));
 
 	$iterator = $client->getIterator('Scan', array(
 		'TableName' => 'person'));
