@@ -1,5 +1,0 @@
-sudo chmod 777 /var/app/current
-
-sudo curl -sS https://getcomposer.org/installer | php
-
-sudo php composer.phar install
